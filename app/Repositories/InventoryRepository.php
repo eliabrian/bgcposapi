@@ -2,40 +2,40 @@
 
 namespace App\Repositories;
 
-use App\Models\Category;
+use App\Models\Inventory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class CategoryRepository
+class InventoryRepository
 {
     /**
-     * Query all category collections.
+     * Query all inventories collections.
      *
      * @return Collection
      */
     public function all(): Collection
     {
-        return QueryBuilder::for(subject: Category::class)
-            ->allowedFilters(filters: ['name'])
+        return QueryBuilder::for(subject: Inventory::class)
+            ->allowedFilters(filters: ['sku', 'name'])
             ->get();
     }
 
     /**
-     * Query a single category resource.
+     * Quer a single inventory resource.
      *
      * @param string $id
      *
-     * @return Category
+     * @return Inventory
      */
-    public function get(string $id): Category
+    public function get(string $id): Inventory
     {
-        return QueryBuilder::for(subject: Category::class)
+        return QueryBuilder::for(subject: Inventory::class)
             ->findOrFail($id);
     }
 
     /**
-     * Store a single category resource.
+     * Store a single inventory resource.
      *
      * @param array $validated
      *
@@ -43,7 +43,7 @@ class CategoryRepository
      */
     public function create(array $validated): mixed
     {
-        return DB::transaction(fn () => Category::query()->create(
+        return DB::transaction(fn () => Inventory::query()->create(
             attributes: [
                 ...$validated,
             ]
@@ -51,27 +51,26 @@ class CategoryRepository
     }
 
     /**
-     * Update a single category resource.
+     * Update a single inventory resource.
      *
      * @param string $id
      * @param array $validated
      *
      * @return bool
      */
-    public function update(string $id, array $validated): bool
+    public function update(string $id, array $validated):bool
     {
-        $category = $this->get($id);
+        $inventory = $this->get($id);
 
-        return DB::transaction(fn () => $category->update(
+        return DB::transaction(fn () => $inventory->update(
             [
                 ...$validated,
             ]
         ));
     }
 
-
     /**
-     * Delete a single category resource.
+     * Delete a single inventory resource.
      *
      * @param string $id
      *
@@ -79,8 +78,8 @@ class CategoryRepository
      */
     public function delete(string $id): bool
     {
-        $category = $this->get($id);
+        $inventory = $this->get($id);
 
-        return DB::transaction(fn () => $category->delete());
+        return DB::transaction(fn () => $inventory->delete());
     }
 }

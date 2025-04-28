@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\v1\Api;
+namespace Tests\Feature\V1\Api;
 
 use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +19,7 @@ class CategoryTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['type', 'id', 'attributes', 'link']
+                    '*' => ['type', 'id', 'attributes', 'links']
                 ]
             ]);
     }
@@ -66,6 +66,20 @@ class CategoryTest extends TestCase
             'slug' => 'test-category',
             'description' => 'Category description test.',
         ]);
+    }
+
+    public function test_store_one_category_with_the_bad_request()
+    {
+        $data = [
+            'name' => 123,
+        ];
+
+        $response = $this->postJson('/api/category', $data);
+
+        $response->assertStatus(422)
+            ->assertJsonStructure([
+                'message', 'errors'
+            ]);
     }
 
     public function test_update_one_category_success()
