@@ -68,7 +68,7 @@ class CategoryTest extends TestCase
         ]);
     }
 
-    public function test_store_one_category_with_the_bad_request()
+    public function test_store_one_category_with_bad_requests()
     {
         $data = [
             'name' => 123,
@@ -110,6 +110,24 @@ class CategoryTest extends TestCase
             'slug' => 'test-category-update',
             'description' => 'Category update description.',
         ]);
+    }
+
+    public function test_update_one_category_with_bad_requests()
+    {
+        $category = Category::factory()->create();
+        $data = [
+            'name' => 123,
+        ];
+
+        $response = $this->putJson(
+            uri: '/api/category/' . $category->id,
+            data: $data
+        );
+
+        $response->assertStatus(422)
+            ->assertJsonStructure([
+                'message', 'errors'
+            ]);
     }
 
     public function test_delete_one_category_success()
